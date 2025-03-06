@@ -43,6 +43,42 @@ class Database {
         return result.rows;
     }
 
+    // View department managers
+    static async viewManagers() {
+        const result = await pool.query(`
+            SELECT
+             d.name AS department, 
+             e.id AS manager_id,
+             e.first_name || ' ' || e.last_name AS manager_name,
+             r.title AS role
+            FROM employee e
+            JOIN role ON e.role_id = role.id
+            JOIN department ON r.department_id = d.id
+            WHERE e.manager_id IS NULL;
+            ORDER BY d.name;
+        `);
+        return result.rows;
+    }
+
+    // View employees by manager
+    static async viewEmployeesByManager() {
+        const result = await pool.query(`
+        SELECT 
+            m.id AS manager_id,
+            m.first_name || ' ' || m.last_name AS manager_name,
+            e.id AS employee_id,
+            e.first_name || ' ' || e.last_name AS employee_name,
+            r.title AS role
+        FROM employee e
+        JOIN role r ON e.role_id = r.id
+        LEFT JOIN employee m ON e.manager_id = m.id
+        WHERE e.manager_id IS NOT NULL  -- Only employees who have managers
+        ORDER BY manager_name, employee_name;
+        `);
+        return result.rows;
+    }
+
+
     // Add a department
     static async addDepartment(name) {
         await pool.query(`INSERT INTO department (name) VALUES ($1);`, [name]);
