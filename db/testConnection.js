@@ -1,7 +1,7 @@
-require('dotenv').config();
+require('dotenv').config(); // Ensure environment variables are loaded
 const pool = require('./connection');
 
-async function testDB() {
+const testDB = async () => {
   try {
     const res = await pool.query('SELECT * FROM department;');
     console.log('Database connected! Departments:', res.rows);
@@ -10,6 +10,6 @@ async function testDB() {
   } finally {
     pool.end();
   }
-}
+};
 
 testDB();
