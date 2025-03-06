@@ -66,22 +66,21 @@ class Database {
     
     // View employees by manager
     static async viewEmployeesByManager() {
-        const result = await pool.query(`
-        SELECT 
-            m.id AS manager_id,
-            m.first_name || ' ' || m.last_name AS manager_name,
-            e.id AS employee_id,
-            e.first_name || ' ' || e.last_name AS employee_name,
-            r.title AS role
-        FROM employee e
-        JOIN role r ON e.role_id = r.id
-        LEFT JOIN employee m ON e.manager_id = m.id
-        WHERE e.manager_id IS NOT NULL  -- Only employees who have managers
-        ORDER BY manager_name, employee_name;
-        `);
-        return result.rows;
+        try {
+            const result = await pool.query(`
+                SELECT 
+                    e.manager_id,
+                    e.id AS employee_id,
+                    e.first_name || ' ' || e.last_name AS employee_name
+                FROM employee e
+                WHERE e.manager_id IS NOT NULL -- ✅ Only employees with managers
+                ORDER BY e.manager_id, e.first_name;
+            `);
+            return result.rows;
+        } catch (error) {
+            console.error('❌ Error fetching employees by manager:', error);
+        }
     }
-
 
     // Add a department
     static async addDepartment(name) {

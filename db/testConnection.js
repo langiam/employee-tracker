@@ -1,4 +1,4 @@
-require('dotenv').config(); // Ensure environment variables are loaded
+require('dotenv').config();
 const pool = require('./connection');
 
 const testDB = async () => {
