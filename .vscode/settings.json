@@ -1,0 +1,10 @@
+{
+    "github.copilot.chat.codeGeneration.instructions": [
+
+    ],
+    "editor.defaultFoldingRangeProvider": "DanielSanMedium.dscodegpt",
+    "editor.defaultFormatter": "DanielSanMedium.dscodegpt",
+    "notebook.defaultFormatter": "DanielSanMedium.dscodegpt",
+    "CodeGPT.apiKey": "OpenAI",
+    "github.copilot.advanced": {}
+}
