@@ -44,22 +44,26 @@ class Database {
     }
 
     // View department managers
-    static async viewManagers() {
-        const result = await pool.query(`
-            SELECT
-             d.name AS department, 
-             e.id AS manager_id,
-             e.first_name || ' ' || e.last_name AS manager_name,
-             r.title AS role
-            FROM employee e
-            JOIN role ON e.role_id = role.id
-            JOIN department ON r.department_id = d.id
-            WHERE e.manager_id IS NULL;
-            ORDER BY d.name;
-        `);
-        return result.rows;
+    static async viewDepartmentManagers() {
+        try {
+            const result = await pool.query(`
+                SELECT 
+                    d.name AS department,
+                    e.id AS manager_id,
+                    e.first_name || ' ' || e.last_name AS manager_name,
+                    r.title AS role
+                FROM employee e
+                JOIN role r ON e.role_id = r.id
+                JOIN department d ON r.department_id = d.id
+                WHERE e.manager_id IS NULL 
+                ORDER BY d.name ASC;  
+            `);
+            return result.rows;
+        } catch (error) {
+            console.error('❌ Error fetching department managers:', error);
+        }
     }
-
+    
     // View employees by manager
     static async viewEmployeesByManager() {
         const result = await pool.query(`
