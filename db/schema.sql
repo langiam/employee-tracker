@@ -2,6 +2,10 @@ DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS department;
 
+DROP DATABASE IF EXISTS employee_tracker;
+
+CREATE DATABASE employee_tracker;
+
 CREATE TABLE department (
     id SERIAL PRIMARY KEY,
     name VARCHAR(30) UNIQUE NOT NULL
@@ -24,3 +28,12 @@ CREATE TABLE employee (
     FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE,
     FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE SET NULL
 );
+
+-- Script Reset
+SELECT pg_terminate_backend(pg_stat_activity.pid)
+FROM pg_stat_activity
+WHERE datname = 'employee_tracker';
+
+DROP DATABASE IF EXISTS employee_tracker;
+
+CREATE DATABASE employee_tracker;
